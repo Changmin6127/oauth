@@ -1,0 +1,29 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Chzzk OAuth Callback</title>
+</head>
+<body>
+  <p>로그인 처리중... 잠시만 기다려주세요.</p>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code') || "";
+      var state = params.get('state') || "";
+
+      // popup을 연 Unity WebGL에 전달
+      try {
+        if (window.opener && !window.opener.closed) {
+          window.opener.postMessage({ source: "chzzk-unity-callback", code: code, state: state }, "*");
+        }
+      } catch(e) {
+        console.error(e);
+      }
+
+      // 300ms 후 창 닫기
+      setTimeout(function(){ try{ window.close(); } catch(e){} }, 300);
+    })();
+  </script>
+</body>
+</html>
